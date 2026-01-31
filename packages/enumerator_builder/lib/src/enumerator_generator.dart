@@ -14,18 +14,22 @@ class EnumeratorGenerator extends GeneratorForAnnotation<Enumerator> {
     ConstantReader annotation,
     BuildStep buildStep,
   ) {
+    final meta = annotation.parse;
     if (element case final EnumElement enumElement) {
       final generated = Library((libraryBuilder) {
         libraryBuilder.body.addAll([
-          _buildBooleanExtension(enumElement),
-          _buildIterableExtension(enumElement),
+          if (meta.predicate ?? true) _buildBooleanExtension(enumElement),
+          if (meta.iterableExtension ?? true)
+            _buildIterableExtension(enumElement),
         ]);
       });
+
       final emitter = DartEmitter(
         useNullSafetySyntax: true,
         orderDirectives: true,
         allocator: Allocator(),
       );
+
       return DartFormatter(
         languageVersion: DartFormatter.latestLanguageVersion,
       ).format(generated.accept(emitter).toString());
@@ -98,4 +102,15 @@ class EnumeratorGenerator extends GeneratorForAnnotation<Enumerator> {
 
 extension on String {
   String get capitalize => this[0].toUpperCase() + substring(1);
+}
+
+extension on ConstantReader {
+  Enumerator get parse {
+    return Enumerator(
+      predicate: objectValue.getField('predicate')?.toBoolValue(),
+      iterableExtension: objectValue
+          .getField('iterableExtension')
+          ?.toBoolValue(),
+    );
+  }
 }
