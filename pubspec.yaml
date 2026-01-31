@@ -1,0 +1,16 @@
+name: enumerator_workspace
+
+environment:
+  sdk: ^3.10.8
+
+workspace:
+  - packages/enumerator
+  - packages/enumerator_builder
+
+dev_dependencies:
+  melos: ^7.4.0
+  very_good_analysis: ^10.0.0
+
+melos:
+  repository: https://github.com/albinpk/dart_enumerator
+  sdkPath: .fvm/flutter_sdk
