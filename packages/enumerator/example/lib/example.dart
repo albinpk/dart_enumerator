@@ -23,4 +23,17 @@ void main() {
   // From set of enum
   Status enum3 = Status.values.toSet().fromName('error');
   Status? enum4 = Status.values.toSet().fromNameOrNull(null);
+
+  // Map to function
+  int value1 = status.map(
+    pending: () => 1,
+    success: () => 2,
+    error: () => 3,
+  );
+
+  // Map to function (optional)
+  String? value2 = status.mapOrNull(
+    success: () => 'Success',
+    // error: () { ... },
+  );
 }

@@ -21,6 +21,7 @@ class EnumeratorGenerator extends GeneratorForAnnotation<Enumerator> {
           if (meta.predicate ?? true) _buildBooleanExtension(enumElement),
           if (meta.iterableExtension ?? true)
             _buildIterableExtension(enumElement),
+          if (meta.map ?? true) _buildMapExtension(enumElement),
         ]);
       });
 
@@ -98,6 +99,47 @@ class EnumeratorGenerator extends GeneratorForAnnotation<Enumerator> {
         ]);
     });
   }
+
+  Extension _buildMapExtension(EnumElement element) {
+    Method buildMap({required bool nullable}) {
+      final nullMark = nullable ? '?' : '';
+      return Method((m) {
+        m
+          ..name = nullable ? 'mapOrNull' : 'map'
+          ..types = ListBuilder([const Reference('T')])
+          ..optionalParameters = ListBuilder(
+            element.constants.map((e) {
+              return Parameter((p) {
+                p
+                  ..name = e.name!
+                  ..named = true
+                  ..required = !nullable
+                  ..type = Reference('T Function()$nullMark');
+              });
+            }),
+          )
+          ..returns = Reference('T$nullMark')
+          ..lambda = true
+          ..body = Code(
+            ' switch (this) {'
+            '${element.constants.map((e) {
+              return ' .${e.name} => ${e.name}${nullable ? '?.call' : ''}()';
+            }).join(',')}'
+            ' }',
+          );
+      });
+    }
+
+    return Extension((extBuilder) {
+      extBuilder
+        ..name = '${element.name}EnumMapExtension'
+        ..on = Reference('${element.name}')
+        ..methods.addAll([
+          buildMap(nullable: false),
+          buildMap(nullable: true),
+        ]);
+    });
+  }
 }
 
 extension on String {
@@ -111,6 +153,7 @@ extension on ConstantReader {
       iterableExtension: objectValue
           .getField('iterableExtension')
           ?.toBoolValue(),
+      map: objectValue.getField('map')?.toBoolValue(),
     );
   }
 }

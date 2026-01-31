@@ -21,3 +21,25 @@ extension StatusEnumIterableExtension on Iterable<Status> {
   Status? fromNameOrNull(String? name) =>
       .values.firstWhereOrNull((e) => e.name == name);
 }
+
+extension StatusEnumMapExtension on Status {
+  T map<T>({
+    required T Function() pending,
+    required T Function() success,
+    required T Function() error,
+  }) => switch (this) {
+    .pending => pending(),
+    .success => success(),
+    .error => error(),
+  };
+
+  T? mapOrNull<T>({
+    T Function()? pending,
+    T Function()? success,
+    T Function()? error,
+  }) => switch (this) {
+    .pending => pending?.call(),
+    .success => success?.call(),
+    .error => error?.call(),
+  };
+}
