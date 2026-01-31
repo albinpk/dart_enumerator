@@ -11,6 +11,7 @@ class Enumerator {
     this.predicate,
     this.iterableExtension,
     this.map,
+    this.isIn,
   });
 
   /// Whether to generate predicate getters. Default is `true`.
@@ -53,6 +54,19 @@ class Enumerator {
   /// );
   /// ```
   final bool? map;
+
+  /// Whether to generate `isIn` method. Default is `true`.
+  ///
+  /// eg.
+  /// ```dart
+  /// @Enumerator(isIn: true)
+  /// enum Status {good, bad, unknown}
+  ///
+  /// const status = Status.good;
+  ///
+  /// bool result = status.isIn({.good, .unknown});
+  /// ```
+  final bool? isIn;
 }
 
 /// {@macro enumerator.enumerator}

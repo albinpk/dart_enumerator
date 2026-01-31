@@ -7,7 +7,7 @@ part of 'example.dart';
 // EnumeratorGenerator
 // **************************************************************************
 
-extension StatusEnumBooleanExtension on Status {
+extension StatusEnumPredicateExtension on Status {
   bool get isPending => this == .pending;
 
   bool get isSuccess => this == .success;
@@ -42,4 +42,8 @@ extension StatusEnumMapExtension on Status {
     .success => success?.call(),
     .error => error?.call(),
   };
+}
+
+extension StatusEnumIsInExtension on Status {
+  bool isIn(Iterable<Status> values) => values.contains(this);
 }

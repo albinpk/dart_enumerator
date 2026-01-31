@@ -18,10 +18,11 @@ class EnumeratorGenerator extends GeneratorForAnnotation<Enumerator> {
     if (element case final EnumElement enumElement) {
       final generated = Library((libraryBuilder) {
         libraryBuilder.body.addAll([
-          if (meta.predicate ?? true) _buildBooleanExtension(enumElement),
+          if (meta.predicate ?? true) _buildPredicateExtension(enumElement),
           if (meta.iterableExtension ?? true)
             _buildIterableExtension(enumElement),
           if (meta.map ?? true) _buildMapExtension(enumElement),
+          if (meta.isIn ?? true) _buildIsInExtension(enumElement),
         ]);
       });
 
@@ -39,10 +40,10 @@ class EnumeratorGenerator extends GeneratorForAnnotation<Enumerator> {
     return null;
   }
 
-  Extension _buildBooleanExtension(EnumElement element) {
+  Extension _buildPredicateExtension(EnumElement element) {
     return Extension((extBuilder) {
       extBuilder
-        ..name = '${element.name}EnumBooleanExtension'
+        ..name = '${element.name}EnumPredicateExtension'
         ..on = Reference(element.name)
         ..methods.addAll(
           element.fields.where((f) => f.isEnumConstant).map((f) {
@@ -140,6 +141,30 @@ class EnumeratorGenerator extends GeneratorForAnnotation<Enumerator> {
         ]);
     });
   }
+
+  Extension _buildIsInExtension(EnumElement element) {
+    return Extension((extBuilder) {
+      extBuilder
+        ..name = '${element.name}EnumIsInExtension'
+        ..on = Reference(element.name)
+        ..methods.add(
+          Method((m) {
+            m
+              ..name = 'isIn'
+              ..requiredParameters = ListBuilder([
+                Parameter((p) {
+                  p
+                    ..name = 'values'
+                    ..type = Reference('Iterable<${element.name}>');
+                }),
+              ])
+              ..returns = const Reference('bool')
+              ..lambda = true
+              ..body = const Code('values.contains(this)');
+          }),
+        );
+    });
+  }
 }
 
 extension on String {
@@ -154,6 +179,7 @@ extension on ConstantReader {
           .getField('iterableExtension')
           ?.toBoolValue(),
       map: objectValue.getField('map')?.toBoolValue(),
+      isIn: objectValue.getField('isIn')?.toBoolValue(),
     );
   }
 }

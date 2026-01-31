@@ -40,5 +40,8 @@ void main() {
     success: () => 'Success',
     // error: () { ... },
   );
+
+  // Check if enum is in given iterable
+  status.isIn({.pending, .error}); // true
 }
 ```
