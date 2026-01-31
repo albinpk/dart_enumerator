@@ -1,8 +1,6 @@
-/// Support for doing something awesome.
-///
-/// More dartdocs go here.
+/// Enumerator, a helper library for Dart enums.
 library;
 
-export 'src/enumerator_base.dart';
+export 'package:collection/collection.dart' show IterableExtension;
 
-// TODO: Export any libraries intended for clients of this package.
+export 'src/enumerator_annotations.dart';

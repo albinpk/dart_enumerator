@@ -1,0 +1,7 @@
+builders:
+  enumerator_builder:
+    import: "package:enumerator_builder/enumerator_builder.dart"
+    builder_factories: ["enumeratorBuilder"]
+    auto_apply: root_package
+    build_to: source
+    build_extensions: { ".dart": [".g.dart"] }
