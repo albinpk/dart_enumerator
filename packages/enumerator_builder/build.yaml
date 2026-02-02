@@ -4,4 +4,4 @@ builders:
     builder_factories: ["enumeratorBuilder"]
     auto_apply: root_package
     build_to: source
-    build_extensions: { ".dart": [".g.dart"] }
+    build_extensions: { ".dart": [".enum.dart"] }

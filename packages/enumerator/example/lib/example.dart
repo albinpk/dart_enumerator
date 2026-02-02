@@ -3,7 +3,7 @@
 
 import 'package:enumerator/enumerator.dart';
 
-part 'example.g.dart';
+part 'example.enum.dart';
 
 @enumerator
 enum Status { pending, success, error }

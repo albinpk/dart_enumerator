@@ -15,3 +15,5 @@ dev_dependencies:
 melos:
   repository: https://github.com/albinpk/dart_enumerator
   sdkPath: .fvm/flutter_sdk
+  scripts:
+    clean: melos exec -c 1 "fvm dart run build_runner clean && fvm flutter clean"
