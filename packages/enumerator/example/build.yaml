@@ -3,7 +3,7 @@ targets:
     builders:
       enumerator_builder:
         options:
-          predicate: true
-          iterableLookup: true
-          map: true
-          isIn: true
+          # predicate: false
+          # iterableLookup: false
+          # map: false
+          # isIn: false

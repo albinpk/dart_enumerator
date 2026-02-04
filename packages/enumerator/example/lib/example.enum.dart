@@ -47,3 +47,52 @@ extension StatusEnumMapExtension on Status {
 extension StatusEnumIsInExtension on Status {
   bool isIn(Iterable<Status> values) => values.contains(this);
 }
+
+extension RoleEnumPredicateExtension on Role {
+  bool get isAdmin => this == .admin;
+
+  bool get isUser => this == .user;
+
+  bool get isGuest => this == .guest;
+}
+
+extension RoleEnumIterableExtension on Iterable<Role> {
+  Role fromName(String name) => .values.firstWhere((e) => e.name == name);
+
+  Role? fromNameOrNull(String? name) =>
+      .values.firstWhereOrNull((e) => e.name == name);
+}
+
+extension RoleEnumMapExtension on Role {
+  T map<T>({
+    required T Function() admin,
+    required T Function() user,
+    required T Function() guest,
+  }) => switch (this) {
+    .admin => admin(),
+    .user => user(),
+    .guest => guest(),
+  };
+
+  T? mapOrNull<T>({
+    T Function()? admin,
+    T Function()? user,
+    T Function()? guest,
+  }) => switch (this) {
+    .admin => admin?.call(),
+    .user => user?.call(),
+    .guest => guest?.call(),
+  };
+}
+
+extension RoleEnumIsInExtension on Role {
+  bool isIn(Iterable<Role> values) => values.contains(this);
+}
+
+extension RoleEnumLookupExtension on Iterable<Role> {
+  Role fromApiValue(String apiValue) =>
+      .values.firstWhere((e) => e.apiValue == apiValue);
+
+  Role? fromApiValueOrNull(String? apiValue) =>
+      .values.firstWhereOrNull((e) => e.apiValue == apiValue);
+}

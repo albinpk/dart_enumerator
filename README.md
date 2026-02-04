@@ -44,4 +44,24 @@ void main() {
   // Check if enum is in given iterable
   status.isIn({.pending, .error}); // true
 }
+
+
+// Enum with custom lookup field.
+
+@enumerator
+enum Role {
+  admin('ROLE-ADMIN'),
+  user('ROLE-USER'),
+  guest('ROLE-GUEST');
+
+  const Role(this.apiValue);
+
+  @enumLookup
+  final String apiValue;
+}
+
+void fn() {
+  final role = Role.values.fromApiValue('ROLE-ADMIN');
+  print(role); // Role.admin
+}
 ```
