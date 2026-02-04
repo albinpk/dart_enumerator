@@ -1,3 +1,9 @@
+## 0.0.1-dev.1
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **REFACTOR**: renamed to `enumerator_annotation`.
+
 ## 0.0.1-dev.0
 
  - **CHORE**: fix description in `pubspec.yaml`
