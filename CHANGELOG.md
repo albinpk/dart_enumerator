@@ -11,6 +11,27 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 Packages with breaking changes:
 
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`enumerator_builder` - `v0.0.1-dev.2`](#enumerator_builder---v001-dev2)
+
+---
+
+#### `enumerator_builder` - `v0.0.1-dev.2`
+
+ - **DOCS**: update `README.md` and `LICENSE`.
+
+
+## 2026-02-04
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
  - [`enumerator_annotation` - `v0.0.1-dev.1`](#enumerator_annotation---v001-dev1)
  - [`enumerator_builder` - `v0.0.1-dev.1`](#enumerator_builder---v001-dev1)
 
