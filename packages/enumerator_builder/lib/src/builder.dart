@@ -3,5 +3,8 @@ import 'package:enumerator_builder/enumerator_builder.dart';
 import 'package:source_gen/source_gen.dart';
 
 /// Builder entry point.
-Builder enumeratorBuilder(BuilderOptions options) =>
-    PartBuilder([EnumeratorGenerator()], '.enum.dart');
+Builder enumeratorBuilder(BuilderOptions options) => PartBuilder(
+  [EnumeratorGenerator(options: options)],
+  '.enum.dart',
+  options: options,
+);

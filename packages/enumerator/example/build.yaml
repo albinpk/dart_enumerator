@@ -1,0 +1,9 @@
+targets:
+  $default:
+    builders:
+      enumerator_builder:
+        options:
+          predicate: true
+          iterableLookup: true
+          map: true
+          isIn: true

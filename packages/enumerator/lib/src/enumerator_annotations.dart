@@ -9,9 +9,10 @@ class Enumerator {
   /// {@macro enumerator.enumerator}
   const Enumerator({
     this.predicate,
-    this.iterableExtension,
+    this.iterableLookup,
     this.map,
     this.isIn,
+    this.customGetters,
   });
 
   /// Whether to generate predicate getters. Default is `true`.
@@ -31,13 +32,13 @@ class Enumerator {
   ///
   /// eg.
   /// ```dart
-  /// @Enumerator(iterableExtension: true)
+  /// @Enumerator(iterableLookup: true)
   /// enum Status {good, bad}
   ///
   /// Status status = Status.values.fromName('good');
   /// Status? status = Status.values.fromNameOrNull('something');
   /// ```
-  final bool? iterableExtension;
+  final bool? iterableLookup;
 
   /// Whether to generate `map` and `mapOrNull` callbacks. Default is `true`.
   ///
@@ -67,7 +68,17 @@ class Enumerator {
   /// bool result = status.isIn({.good, .unknown});
   /// ```
   final bool? isIn;
+
+  // TODO(albin):
+  final Set<Symbol>? customGetters;
 }
 
 /// {@macro enumerator.enumerator}
 const enumerator = Enumerator();
+
+@Target({.field})
+class EnumLookup {
+  const EnumLookup();
+}
+
+const enumLookup = EnumLookup();

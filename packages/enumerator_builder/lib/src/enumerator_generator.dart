@@ -8,21 +8,27 @@ import 'package:source_gen/source_gen.dart';
 
 /// Generator for [Enumerator] annotation.
 class EnumeratorGenerator extends GeneratorForAnnotation<Enumerator> {
+  const EnumeratorGenerator({required this.options});
+
+  final BuilderOptions options;
+
   @override
   String? generateForAnnotatedElement(
     Element element,
     ConstantReader annotation,
     BuildStep buildStep,
   ) {
-    final meta = annotation.parse;
     if (element case final EnumElement enumElement) {
+      final meta = annotation.parse(options);
       final generated = Library((libraryBuilder) {
         libraryBuilder.body.addAll([
-          if (meta.predicate ?? true) _buildPredicateExtension(enumElement),
-          if (meta.iterableExtension ?? true)
-            _buildIterableExtension(enumElement),
-          if (meta.map ?? true) _buildMapExtension(enumElement),
-          if (meta.isIn ?? true) _buildIsInExtension(enumElement),
+          if (meta.predicate ?? true) _buildPredicate(enumElement),
+          if (meta.iterableLookup ?? true) _buildIterableLookup(enumElement),
+          if (meta.map ?? true) _buildMap(enumElement),
+          if (meta.isIn ?? true) _buildIsIn(enumElement),
+          ?_buildCustomLookup(element),
+          // if (meta.customGetters?.isNotEmpty ?? false)
+          //   _buildCustomGetterExtension(element, meta.customGetters!),
         ]);
       });
 
@@ -40,7 +46,7 @@ class EnumeratorGenerator extends GeneratorForAnnotation<Enumerator> {
     return null;
   }
 
-  Extension _buildPredicateExtension(EnumElement element) {
+  Extension _buildPredicate(EnumElement element) {
     return Extension((extBuilder) {
       extBuilder
         ..name = '${element.name}EnumPredicateExtension'
@@ -60,7 +66,7 @@ class EnumeratorGenerator extends GeneratorForAnnotation<Enumerator> {
     });
   }
 
-  Extension _buildIterableExtension(EnumElement element) {
+  Extension _buildIterableLookup(EnumElement element) {
     return Extension((extBuilder) {
       extBuilder
         ..name = '${element.name}EnumIterableExtension'
@@ -101,7 +107,51 @@ class EnumeratorGenerator extends GeneratorForAnnotation<Enumerator> {
     });
   }
 
-  Extension _buildMapExtension(EnumElement element) {
+  Extension? _buildCustomLookup(EnumElement element) {
+    final fields = element.fields.where((e) {
+      return e.isFinal && !e.hasInitializer && e.parse != null;
+    }).toList();
+
+    if (fields.isEmpty) return null;
+
+    // ignore: avoid_positional_boolean_parameters
+    Method buildMethod(FieldElement s, bool nullable) {
+      final name = s.name!;
+      final type = s.type;
+      return Method((m) {
+        m
+          ..name = 'from${name.capitalize}${nullable ? 'OrNull' : ''}'
+          ..requiredParameters = ListBuilder([
+            Parameter((p) {
+              p
+                ..name = name
+                ..type = !nullable || type.nullabilitySuffix == .question
+                    ? Reference('$type')
+                    : Reference('$type?');
+            }),
+          ])
+          ..returns = Reference('${element.name}${nullable ? '?' : ''}')
+          ..lambda = true
+          ..body = Code(
+            '.values.firstWhere${nullable ? 'OrNull' : ''}((e) => e.$name == $name)',
+          );
+      });
+    }
+
+    return Extension((extBuilder) {
+      extBuilder
+        ..name = '${element.name}EnumLookupExtension'
+        ..on = Reference('Iterable<${element.name}>')
+        ..methods.addAll([
+          for (final s in fields) ...[
+            buildMethod(s, false),
+            buildMethod(s, true),
+          ],
+        ]);
+    });
+  }
+
+  Extension _buildMap(EnumElement element) {
     Method buildMap({required bool nullable}) {
       final nullMark = nullable ? '?' : '';
       return Method((m) {
@@ -142,7 +192,57 @@ class EnumeratorGenerator extends GeneratorForAnnotation<Enumerator> {
     });
   }
 
-  Extension _buildIsInExtension(EnumElement element) {
+  /*
+  Extension _buildCustomGetterExtension(
+    EnumElement element,
+    Set<Symbol> getterSymbols,
+  ) {
+    final fields = element.fields
+        .where((e) => e.isFinal && !e.hasInitializer)
+        .toList();
+
+    Method buildMethod(Symbol symbol, bool nullable) {
+      final name = symbol.name;
+      final type = fields.firstWhere((e) => e.name == name).type;
+      return Method((m) {
+        m
+          ..name = 'from${name.capitalize}${nullable ? 'OrNull' : ''}'
+          ..requiredParameters = ListBuilder([
+            Parameter((p) {
+              p
+                ..name = name
+                ..type = !nullable || type.nullabilitySuffix == .question
+                    ? Reference('$type')
+                    : Reference('$type?');
+            }),
+          ])
+          ..returns = Reference('${element.name}${nullable ? '?' : ''}')
+          ..lambda = true
+          ..body = Code(
+            '.values.firstWhere${nullable ? 'OrNull' : ''}((e) => e.$name == $name)',
+          );
+      });
+    }
+
+    final validSymbols = getterSymbols.where(
+      (e) => fields.any((f) => f.name == e.name),
+    );
+
+    return Extension((extBuilder) {
+      extBuilder
+        ..name = '${element.name}EnumCustomGetterExtension'
+        ..on = Reference('Iterable<${element.name}>')
+        ..methods.addAll([
+          for (final s in validSymbols) ...[
+            buildMethod(s, false),
+            buildMethod(s, true),
+          ],
+        ]);
+    });
+  }
+  */
+
+  Extension _buildIsIn(EnumElement element) {
     return Extension((extBuilder) {
       extBuilder
         ..name = '${element.name}EnumIsInExtension'
@@ -172,14 +272,36 @@ extension on String {
 }
 
 extension on ConstantReader {
-  Enumerator get parse {
+  Enumerator parse(BuilderOptions options) {
+    final map = options.config;
     return Enumerator(
-      predicate: objectValue.getField('predicate')?.toBoolValue(),
-      iterableExtension: objectValue
-          .getField('iterableExtension')
-          ?.toBoolValue(),
-      map: objectValue.getField('map')?.toBoolValue(),
-      isIn: objectValue.getField('isIn')?.toBoolValue(),
+      predicate:
+          objectValue.getField('predicate')?.toBoolValue() ??
+          map['predicate'] as bool?,
+      iterableLookup:
+          objectValue.getField('iterableLookup')?.toBoolValue() ??
+          map['iterableLookup'] as bool?,
+      map: objectValue.getField('map')?.toBoolValue() ?? map['map'] as bool?,
+      isIn: objectValue.getField('isIn')?.toBoolValue() ?? map['isIn'] as bool?,
+      customGetters: objectValue
+          .getField('customGetters')
+          ?.toSetValue()
+          ?.map((e) => Symbol(e.toSymbolValue()!))
+          .toSet(),
     );
   }
 }
+
+extension on FieldElement {
+  EnumLookup? get parse {
+    if (metadata.annotations.firstOrNull?.computeConstantValue() case final obj?
+        when obj.type?.getDisplayString() == '$EnumLookup') {
+      return const EnumLookup();
+    }
+    return null;
+  }
+}
+
+// extension on Symbol {
+//   String get name => toString().substring(8, toString().length - 2);
+// }
