@@ -1,3 +1,7 @@
+## 0.0.1-dev.2
+
+ - **DOCS**: update `README.md`.
+
 ## 0.0.1-dev.1
 
 > Note: This release has breaking changes.

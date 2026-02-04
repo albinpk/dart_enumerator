@@ -1,6 +1,6 @@
 name: enumerator_annotation
 description: Code generation utilities for Dart enums
-version: 0.0.1-dev.1
+version: 0.0.1-dev.2
 
 homepage: https://github.com/albinpk/dart_enumerator
 repository: https://github.com/albinpk/dart_enumerator
