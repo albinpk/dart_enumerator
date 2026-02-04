@@ -1,7 +1,10 @@
 name: enumerator
 description: A starting point for Dart libraries or applications.
 version: 0.0.1-dev.0
-# repository: https://github.com/my_org/my_repo
+
+homepage: https://github.com/albinpk/dart_enumerator
+repository: https://github.com/albinpk/dart_enumerator
+issue_tracker: https://github.com/albinpk/dart_enumerator/issues
 
 resolution: workspace
 
@@ -14,3 +17,10 @@ dependencies:
 
 dev_dependencies:
   test: ^1.25.6
+
+topics:
+  - enum
+  - extension
+  - code-generation
+  - enum-extension
+  - enum-helper
