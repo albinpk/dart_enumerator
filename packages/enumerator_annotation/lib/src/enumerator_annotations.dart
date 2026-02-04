@@ -1,12 +1,12 @@
 import 'package:meta/meta_meta.dart';
 
-/// {@template enumerator.enumerator}
+/// {@template enumerator_annotation.enumerator}
 /// [Enum]s annotated with [Enumerator] will generate
 /// helper methods and extensions for the enum.
 /// {@endtemplate}
 @Target({.enumType})
 class Enumerator {
-  /// {@macro enumerator.enumerator}
+  /// {@macro enumerator_annotation.enumerator}
   const Enumerator({
     this.predicate,
     this.iterableLookup,
@@ -73,7 +73,7 @@ class Enumerator {
   final Set<Symbol>? customGetters;
 }
 
-/// {@macro enumerator.enumerator}
+/// {@macro enumerator_annotation.enumerator}
 const enumerator = Enumerator();
 
 @Target({.field})

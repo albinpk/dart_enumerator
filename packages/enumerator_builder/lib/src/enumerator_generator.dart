@@ -3,7 +3,7 @@ import 'package:build/build.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:code_builder/code_builder.dart';
 import 'package:dart_style/dart_style.dart';
-import 'package:enumerator/enumerator.dart';
+import 'package:enumerator_annotation/enumerator_annotation.dart';
 import 'package:source_gen/source_gen.dart';
 
 /// Generator for [Enumerator] annotation.

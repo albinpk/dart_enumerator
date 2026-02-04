@@ -1,4 +1,4 @@
-name: enumerator
+name: enumerator_annotation
 description: Code generation utilities for Dart enums
 version: 0.0.1-dev.0
 

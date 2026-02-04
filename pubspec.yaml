@@ -4,9 +4,9 @@ environment:
   sdk: ^3.10.8
 
 workspace:
-  - packages/enumerator
+  - packages/enumerator_annotation
   - packages/enumerator_builder
-  - packages/enumerator/example
+  - packages/enumerator_annotation/example
 
 dev_dependencies:
   melos: ^7.4.0

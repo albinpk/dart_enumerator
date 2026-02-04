@@ -2,7 +2,7 @@
 
 **Code generation utilities for Dart enums**
 
-`enumerator` is a lightweight Dart code generator that adds **useful, type-safe helpers** to enums—such as predicate getters derived from enum values, lookup utilities, functional mapping, and custom field lookups, using a single annotation.
+`enumerator_builder` is a lightweight Dart code generator that adds **useful, type-safe helpers** to enums—such as predicate getters derived from enum values, lookup utilities, functional mapping, and custom field lookups, using a single annotation.
 
 ---
 
@@ -27,7 +27,7 @@ Add the dependencies:
 
 ```
 dart pub add \
-  enumerator \
+  enumerator_annotation \
   dev:build_runner \
   dev:enumerator_builder
 ```
@@ -36,7 +36,7 @@ dart pub add \
 
 ```
 flutter pub add \
-  enumerator \
+  enumerator_annotation \
   dev:build_runner \
   dev:enumerator_builder
 ```
@@ -50,7 +50,7 @@ flutter pub add \
 ```dart
 // status.dart
 
-import 'package:enumerator/enumerator.dart';
+import 'package:enumerator_annotation/enumerator_annotation.dart';
 
 part 'status.enum.dart';
 

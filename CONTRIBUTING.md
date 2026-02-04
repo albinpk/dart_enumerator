@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for your interest in contributing to **enumerator**.
+Thanks for your interest in contributing to **enumerator_builder**.
 
 This project aims to stay **small, focused, and predictable**, so contributions should align with that goal.
 

@@ -9,7 +9,7 @@ environment:
   sdk: ^3.10.8
 
 dependencies:
-  enumerator:
+  enumerator_annotation:
     path: ../
 
 dev_dependencies:

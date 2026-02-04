@@ -1,7 +1,7 @@
 // ignore: lines_longer_than_80_chars
 // ignore_for_file: avoid_print, unused_local_variable, omit_local_variable_types, prefer_final_locals
 
-import 'package:enumerator/enumerator.dart';
+import 'package:enumerator_annotation/enumerator_annotation.dart';
 
 part 'example.enum.dart';
 
