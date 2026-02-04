@@ -11,33 +11,29 @@ enum Status { pending, success, error }
 void main() {
   const status = Status.pending;
 
-  // Getters
+  // Predicate getters derived from enum value names
   print(status.isPending); // true
   print(status.isSuccess); // false
   print(status.isError); // false
 
-  // From list of enum
+  // Lookup by name
   Status enum1 = Status.values.fromName('pending');
   Status? enum2 = Status.values.fromNameOrNull('something');
 
-  // From set of enum
-  Status enum3 = Status.values.toSet().fromName('error');
-  Status? enum4 = Status.values.toSet().fromNameOrNull(null);
-
-  // Map to function
+  // Functional mapping
   int value1 = status.map(
     pending: () => 1,
     success: () => 2,
     error: () => 3,
   );
 
-  // Map to function (optional)
+  // Optional mapping
   String? value2 = status.mapOrNull(
     success: () => 'Success',
     // error: () { ... },
   );
 
-  // Check if enum is in given iterable
+  // Membership check
   status.isIn({.pending, .error}); // true
 }
 
